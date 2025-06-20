@@ -9,6 +9,8 @@ from google.auth.transport import requests as google_requests
 import pandas as pd
 import os
 import uuid
+from rest_framework import status
+from .models import Hotel
 
 # ✅ Render Google login HTML with client ID from settings
 def google_login_page(request):
@@ -50,7 +52,6 @@ class CsvToExcelView(APIView):
         except Exception as e:
             return Response({'error': f'Failed to read CSV: {str(e)}'}, status=400)
 
-        # Create unique filename
         filename = f"converted_{uuid.uuid4().hex}.xlsx"
         excel_path = os.path.join(settings.MEDIA_ROOT, filename)
 
@@ -59,9 +60,28 @@ class CsvToExcelView(APIView):
         except Exception as e:
             return Response({'error': f'Failed to convert to Excel: {str(e)}'}, status=500)
 
-        return FileResponse(open(excel_path, 'rb'), as_attachment=True, filename=filename)
+        return Response({'filename': filename})
 
 
 
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+
+class HotelListAPIView(APIView):
+    def get(self, request):
+        city = request.GET.get('city', '').lower()
+        if not city:
+            return Response({"error": "City parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        hotels = Hotel.objects.filter(city__iexact=city)
+
+        data = [
+            {"name": h.name, "address": h.address, "price": h.price}
+            for h in hotels
+        ]
+
+        return Response({"hotels": data})
+    
+def hotel_page(request):
+    return render(request, 'hotels.html')

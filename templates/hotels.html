@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hotel Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #dcedc8);
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    nav {
+      flex-shrink: 0;
+    }
+
+    .hotel-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 3rem 1rem;
+    }
+
+    .search-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .hotel-card {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.75rem;
+      background-color: #f9f9f9;
+    }
+
+    .btn-primary {
+      background-color: #00796b;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔼 Navbar (Same as other pages) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">My Utilities</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/api/dashboard/">🔄 Converter</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/hotels-page/">🏨 Hotels</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔽 Hotel Search UI -->
+  <div class="hotel-wrapper">
+    <div class="search-box w-100">
+      <h3 class="text-center mb-4">🏨 Search Hotels by City</h3>
+
+      <form id="hotelSearchForm" class="row g-3 justify-content-center">
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="cityInput" placeholder="Enter city name..." required>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-primary w-100" type="submit">🔍 Search</button>
+        </div>
+      </form>
+
+      <div id="results" class="mt-4"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const form = document.getElementById('hotelSearchForm');
+    const cityInput = document.getElementById('cityInput');
+    const results = document.getElementById('results');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (!city) return;
+
+      results.innerHTML = `<div class="text-primary">🔄 Searching hotels in <strong>${city}</strong>...</div>`;
+
+      fetch(`/api/hotels/?city=${encodeURIComponent(city)}`)
+        .then(res => res.json())
+        .then(data => {
+          results.innerHTML = '';
+          if (data.hotels && data.hotels.length > 0) {
+            data.hotels.forEach(hotel => {
+              results.innerHTML += `
+                <div class="hotel-card">
+                  <h5>${hotel.name}</h5>
+                  <p>${hotel.address}</p>
+                  <p class="text-muted">Price: ₹${hotel.price}</p>
+                </div>
+              `;
+            });
+          } else {
+            results.innerHTML = `<div class="alert alert-warning">⚠️ No hotels found for <strong>${city}</strong>.</div>`;
+          }
+        })
+        .catch(err => {
+          results.innerHTML = `<div class="alert alert-danger">❌ Error: ${err.message}</div>`;
+        });
+    });
+  </script>
+</body>
+</html>

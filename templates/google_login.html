@@ -53,7 +53,7 @@
       const messageDiv = document.getElementById('message');
       messageDiv.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Signing in...';
 
-      fetch('http://127.0.0.1:8000/api/google-login/', {
+      fetch('http://127.0.0.1:8000/api/google-login-page/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -67,10 +67,10 @@
         } else {
           messageDiv.innerHTML = `<div class="alert alert-success">Login successful! Welcome, ${data.name || 'User'}.</div>`;
 
-          // 2 second baad dashboard pe redirect
+          // 1 second baad dashboard pe redirect
           setTimeout(() => {
             window.location.href = '/api/dashboard/';
-          }, 2000);
+          }, 1000);
         }
       })
       .catch(err => {

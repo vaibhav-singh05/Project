@@ -1,10 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSV to Excel Converter</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0f0f0, #d9e4f5);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+
+    nav {
+      flex-shrink: 0;
+    }
+
+    .converter-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .converter-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .file-label {
+      border: 2px dashed #6c63ff;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      cursor: pointer;
+      color: #6c63ff;
+      transition: 0.3s ease;
+    }
+
+    .file-label:hover {
+      background-color: #f4f3ff;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    #message {
+      margin-top: 1rem;
+    }
+
+    .btn-primary {
+      background-color: #6c63ff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #574ed6;
+    }
+
+    #downloadSection {
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to your Dashboard!</h1>
-  <p>You are logged in successfully.</p>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">My Utilities</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/dashboard/">🔄 Converter</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/api/hotels-page/">🏨 Hotels</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Converter Section -->
+  <div class="converter-wrapper">
+    <div class="converter-card">
+      <h3 class="mb-4 text-dark">📄 CSV to Excel Converter</h3>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <label for="fileInput" class="file-label w-100">
+          <div>📁 Click to choose a CSV file</div>
+          <div class="small">Only .csv files allowed</div>
+        </label>
+        <input type="file" name="file" id="fileInput" accept=".csv" required>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3">🔄 Convert CSV</button>
+      </form>
+
+      <div id="message"></div>
+
+      <div id="downloadSection" style="display: none;">
+        <a id="downloadLink" class="btn btn-success mt-3" download>⬇️ Download Excel</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const message = document.getElementById('message');
+    const downloadSection = document.getElementById('downloadSection');
+    const downloadLink = document.getElementById('downloadLink');
+    const label = document.querySelector('.file-label');
+
+    label.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        label.textContent = `📁 Selected: ${fileInput.files[0].name}`;
+      }
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      message.innerHTML = `<div class="text-primary mt-3">⏳ Converting... please wait</div>`;
+      downloadSection.style.display = 'none';
+
+      fetch('/api/csv-to-excel/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          message.innerHTML = `<div class="alert alert-danger mt-3">❌ ${data.error}</div>`;
+        } else {
+          message.innerHTML = `<div class="alert alert-success mt-3">✅ File converted successfully!</div>`;
+          downloadLink.href = `/media/${data.filename}`;
+          downloadLink.setAttribute('download', data.filename);
+          downloadSection.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        message.innerHTML = `<div class="alert alert-danger mt-3">❌ ${err.message}</div>`;
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GoogleLoginView, CsvToExcelView, google_login_page, dashboard
+from .views import GoogleLoginView, CsvToExcelView, google_login_page, dashboard, HotelListAPIView, hotel_page
 
 urlpatterns = [
     # API Endpoints
@@ -9,4 +9,6 @@ urlpatterns = [
     # Frontend Page
     path('google-login-page/', google_login_page, name='google-login-page'),
     path('dashboard/', dashboard, name='dashboard'),
+    path('hotels/', HotelListAPIView.as_view(), name='hotels'),
+    path('hotels-page/', hotel_page, name='hotels-page'),
 ]
