@@ -12,9 +12,9 @@ This is a Django-based full-stack web application that features:
 
 ## 🚀 Live Demo
 
-🔗 [https://project-1-5kp0.onrender.com/api/google-login-page/](https://project-1-5kp0.onrender.com/api/google-login-page/)
-🔗 [https://project-1-5kp0.onrender.com/api/dashboard/](https://project-1-5kp0.onrender.com/api/dashboard/)
-🔗 [https://project-1-5kp0.onrender.com/api/hotels-page/](https://project-1-5kp0.onrender.com/api/hotels-page/)
+🔗 [https://project-1-5kp0.onrender.com/api/google-login-page/](https://project-1-5kp0.onrender.com/api/google-login-page/) <br>
+🔗 [https://project-1-5kp0.onrender.com/api/dashboard/](https://project-1-5kp0.onrender.com/api/dashboard/) <br>
+🔗 [https://project-1-5kp0.onrender.com/api/hotels-page/](https://project-1-5kp0.onrender.com/api/hotels-page/) <br>
 
 ---
 
