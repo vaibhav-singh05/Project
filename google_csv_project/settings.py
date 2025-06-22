@@ -26,13 +26,13 @@ SECRET_KEY = 'django-insecure--#(o#5p@$1k%-gb96y#7(nl=nuh5loulve5q2=wg3ja)=-&4ai
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["project-6xe9.onrender.com"]
+ALLOWED_HOSTS = ["project-1-5kp0.onrender.com"]
 CORS_ALLOWED_ORIGINS = [
-    "https://project-6xe9.onrender.com",
+    "https://project-1-5kp0.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://project-6xe9.onrender.com",
+    "https://project-1-5kp0.onrender.com",
 ]
 
 # Application definition

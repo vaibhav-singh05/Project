@@ -58,7 +58,7 @@
           <span class="visually-hidden">Loading...</span>
         </div> Signing in...`;
 
-      fetch('https://project-6xe9.onrender.com/api/google-login/', {
+      fetch('https://project-1-5kp0.onrender.com/api/google-login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: response.credential })
@@ -70,7 +70,7 @@
         } else {
           messageDiv.innerHTML = `<div class="alert alert-success">Login successful! Welcome, ${data.name || 'User'}.</div>`;
           setTimeout(() => {
-            window.location.href = 'https://project-6xe9.onrender.com/api/dashboard/';
+            window.location.href = 'https://project-1-5kp0.onrender.com/api/dashboard/';
           }, 1000);
         }
       })
