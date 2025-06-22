@@ -129,12 +129,6 @@ google_csv_project/
 
 ---
 
-## 🖼️ Screenshots
-
-> 📌 Add screenshots of login page, CSV upload, and hotel list results here.
-
----
-
 ## 👤 Author
 
 **Vaibhav Singh**  
