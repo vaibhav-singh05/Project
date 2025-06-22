@@ -28,10 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
+    "https://project-6xe9.onrender.com",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://project-6xe9.onrender.com",
+]
 
 # Application definition
 
@@ -139,3 +141,6 @@ SECRET_KEY = config("SECRET_KEY")
 # If needed
 DEBUG = config("DEBUG", default=False, cast=bool)
 GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID")
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

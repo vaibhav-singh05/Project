@@ -37,7 +37,7 @@
     <div class="login-box">
       <h2 class="mb-4">Sign in with Google</h2>
 
-      <!-- GSI Onload & Sign-In Button -->
+      <!-- Google Identity Button -->
       <div id="g_id_onload"
            data-client_id="{{ google_client_id }}"
            data-callback="handleCredentialResponse"
@@ -58,12 +58,10 @@
           <span class="visually-hidden">Loading...</span>
         </div> Signing in...`;
 
-      fetch('/api/google-login/', {
+      fetch('https://project-6xe9.onrender.com/api/google-login/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id_token: response.credential })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
       })
       .then(res => res.json())
       .then(data => {
@@ -72,7 +70,7 @@
         } else {
           messageDiv.innerHTML = `<div class="alert alert-success">Login successful! Welcome, ${data.name || 'User'}.</div>`;
           setTimeout(() => {
-            window.location.href = '/api/dashboard/';
+            window.location.href = 'https://project-6xe9.onrender.com/api/dashboard/';
           }, 1000);
         }
       })
