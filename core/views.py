@@ -12,32 +12,39 @@ import uuid
 from rest_framework import status
 from .models import Hotel
 
-# ✅ Render Google login HTML with client ID from settings
+# ✅ Render Google login page (pass client ID from settings)
 def google_login_page(request):
     return render(request, 'google_login.html', {
         'google_client_id': settings.GOOGLE_CLIENT_ID
     })
 
 
-# ✅ Google Login endpoint with real token validation
+# ✅ API: Handle Google Sign-In token
 class GoogleLoginView(APIView):
     def post(self, request):
-        token = request.data.get("id_token")
+        token = request.data.get("token")  # match frontend's key
+
         if not token:
             return Response({"error": "ID token is required"}, status=400)
 
         try:
-            idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), settings.GOOGLE_CLIENT_ID)
+            # Verify the token with Google's public keys
+            idinfo = id_token.verify_oauth2_token(
+                token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
+            )
+
             return Response({
                 "message": "Login successful",
                 "email": idinfo.get("email"),
                 "name": idinfo.get("name"),
+                "picture": idinfo.get("picture"),
             })
+
         except ValueError:
             return Response({"error": "Invalid ID token"}, status=401)
 
 
-# ✅ CSV to Excel conversion API
+# ✅ CSV to Excel conversion
 class CsvToExcelView(APIView):
     parser_classes = [MultiPartParser]
 
@@ -63,11 +70,12 @@ class CsvToExcelView(APIView):
         return Response({'filename': filename})
 
 
-
+# ✅ Render dashboard page
 def dashboard(request):
     return render(request, 'dashboard.html')
 
 
+# ✅ Hotel listing based on city
 class HotelListAPIView(APIView):
     def get(self, request):
         city = request.GET.get('city', '').lower()
@@ -82,6 +90,8 @@ class HotelListAPIView(APIView):
         ]
 
         return Response({"hotels": data})
-    
+
+
+# ✅ Render hotel search UI
 def hotel_page(request):
     return render(request, 'hotels.html')
