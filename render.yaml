@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: google-csv-project
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn google_csv_project.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: google_csv_project.settings
+    build:
+      environment:
+        pythonVersion: 3.11.9
